@@ -1,18 +1,18 @@
 # SmartDocs B2B
 
-Monorepo inicial para la plataforma SaaS multitenant de analisis inteligente y chat con documentos orientada a empresas.
+Initial monorepo for a B2B SaaS platform focused on intelligent document analysis and chat, designed for enterprise teams such as legal, finance, and HR.
 
-## Estructura
+## Project structure
 
-- `apps/web`: frontend Next.js
-- `apps/api`: backend NestJS
-- `apps/worker`: procesamiento asincrono con BullMQ
-- `packages/db`: esquema y cliente de base de datos (Drizzle)
-- `packages/shared`: tipos y utilidades compartidas
-- `packages/ui`: componentes reutilizables
-- `packages/config`: configuracion compartida (lint/tsconfig)
+- `apps/web`: Next.js frontend
+- `apps/api`: NestJS backend
+- `apps/worker`: asynchronous processing with BullMQ
+- `packages/db`: database schema and client (Drizzle)
+- `packages/shared`: shared types and utilities
+- `packages/ui`: reusable UI components
+- `packages/config`: shared linting and TypeScript configuration
 
-## Scripts raiz
+## Root scripts
 
 - `pnpm dev`
 - `pnpm build`
@@ -20,17 +20,17 @@ Monorepo inicial para la plataforma SaaS multitenant de analisis inteligente y c
 - `pnpm typecheck`
 - `pnpm test`
 
-## Stack principal
+## Main stack
 
-- `Next.js` para frontend y dashboard
-- `NestJS` para API y negocio
-- `PostgreSQL + Drizzle + pgvector` para persistencia y embeddings
-- `BullMQ + Redis` para trabajos asincronos
-- `TurboRepo + pnpm workspaces` para monorepo
+- `Next.js` for the frontend and dashboard
+- `NestJS` for the business API layer
+- `PostgreSQL + Drizzle + pgvector` for persistence and embeddings
+- `BullMQ + Redis` for asynchronous jobs
+- `TurboRepo + pnpm workspaces` for monorepo orchestration
 
-## Proximos pasos
+## Next steps
 
-1. Bootstrap de Next.js en `apps/web`.
-2. Bootstrap de NestJS en `apps/api`.
-3. Configurar worker y colas en `apps/worker`.
-4. Disenar esquema multitenant en `packages/db`.
+1. Bootstrap `apps/web` with Next.js.
+2. Bootstrap `apps/api` with NestJS.
+3. Configure the worker and queue pipeline in `apps/worker`.
+4. Design the multitenant schema in `packages/db`.
