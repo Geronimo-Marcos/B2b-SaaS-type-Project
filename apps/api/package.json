@@ -1,0 +1,13 @@
+{
+  "name": "@smartdocs/api",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo \"TODO: bootstrap NestJS API\"",
+    "build": "echo \"TODO: build API\"",
+    "lint": "echo \"TODO: lint API\"",
+    "typecheck": "echo \"TODO: typecheck API\"",
+    "test": "echo \"TODO: test API\""
+  }
+}
+

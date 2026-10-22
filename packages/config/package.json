@@ -1,0 +1,12 @@
+{
+  "name": "@smartdocs/config",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "echo \"TODO: build config package\"",
+    "lint": "echo \"TODO: lint config package\"",
+    "typecheck": "echo \"TODO: typecheck config package\"",
+    "test": "echo \"TODO: test config package\""
+  }
+}
+

@@ -1,0 +1,27 @@
+{
+  "name": "@smartdocs/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "build": "tsc --project tsconfig.json",
+    "lint": "echo \"TODO: lint db package\"",
+    "typecheck": "tsc --noEmit --project tsconfig.json",
+    "test": "echo \"TODO: test db package\""
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.4",
+    "pg": "^8.16.0",
+    "pgvector": "^0.3.0",
+    "postgres": "^3.4.9"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.15.5",
+    "drizzle-kit": "^0.31.4",
+    "typescript": "^5.9.2"
+  }
+}
+

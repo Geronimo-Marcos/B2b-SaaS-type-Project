@@ -1,0 +1,12 @@
+{
+  "name": "@smartdocs/ui",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "build": "echo \"TODO: build ui package\"",
+    "lint": "echo \"TODO: lint ui package\"",
+    "typecheck": "echo \"TODO: typecheck ui package\"",
+    "test": "echo \"TODO: test ui package\""
+  }
+}
+

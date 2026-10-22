@@ -1,0 +1,13 @@
+{
+  "name": "@smartdocs/worker",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "echo \"TODO: bootstrap worker\"",
+    "build": "echo \"TODO: build worker\"",
+    "lint": "echo \"TODO: lint worker\"",
+    "typecheck": "echo \"TODO: typecheck worker\"",
+    "test": "echo \"TODO: test worker\""
+  }
+}
+

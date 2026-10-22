@@ -1,36 +1,36 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SmartDocs B2B
 
-## Getting Started
+Monorepo inicial para la plataforma SaaS multitenant de analisis inteligente y chat con documentos orientada a empresas.
 
-First, run the development server:
+## Estructura
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- `apps/web`: frontend Next.js
+- `apps/api`: backend NestJS
+- `apps/worker`: procesamiento asincrono con BullMQ
+- `packages/db`: esquema y cliente de base de datos (Drizzle)
+- `packages/shared`: tipos y utilidades compartidas
+- `packages/ui`: componentes reutilizables
+- `packages/config`: configuracion compartida (lint/tsconfig)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Scripts raiz
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- `pnpm dev`
+- `pnpm build`
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm test`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Stack principal
 
-## Learn More
+- `Next.js` para frontend y dashboard
+- `NestJS` para API y negocio
+- `PostgreSQL + Drizzle + pgvector` para persistencia y embeddings
+- `BullMQ + Redis` para trabajos asincronos
+- `TurboRepo + pnpm workspaces` para monorepo
 
-To learn more about Next.js, take a look at the following resources:
+## Proximos pasos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Bootstrap de Next.js en `apps/web`.
+2. Bootstrap de NestJS en `apps/api`.
+3. Configurar worker y colas en `apps/worker`.
+4. Disenar esquema multitenant en `packages/db`.
