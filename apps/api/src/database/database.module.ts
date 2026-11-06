@@ -1,4 +1,4 @@
-﻿import { Global, Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { createDatabase, type Database } from "@smartdocs/db";
 
@@ -11,7 +11,7 @@ export const DATABASE = Symbol("DATABASE");
       provide: DATABASE,
       inject: [ConfigService],
       useFactory: (configService: ConfigService): Database => {
-        const databaseUrl = configService.get<string>("DATABASE_URL");
+        const databaseUrl = configService.get<string>("DATABASE_URL")?.trim();
 
         if (!databaseUrl) {
           throw new Error("DATABASE_URL is required to initialize the database");

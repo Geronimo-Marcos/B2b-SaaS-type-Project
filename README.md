@@ -34,3 +34,18 @@ Initial monorepo for a B2B SaaS platform focused on intelligent document analysi
 2. Bootstrap `apps/api` with NestJS.
 3. Configure the worker and queue pipeline in `apps/worker`.
 4. Design the multitenant schema in `packages/db`.
+
+## Local PostgreSQL
+
+Start the local PostgreSQL instance with pgvector:
+
+```bash
+docker compose up -d postgres
+pnpm --filter @smartdocs/db db:migrate
+```
+
+Stop it with:
+
+```bash
+docker compose down
+```
