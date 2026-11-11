@@ -49,3 +49,13 @@ Stop it with:
 ```bash
 docker compose down
 ```
+
+The API requires `DATABASE_URL` and `JWT_SECRET` environment variables. For local
+development, use the PostgreSQL URL from `docker-compose.yml` and a long random
+value for `JWT_SECRET`.
+
+Login with `POST /api/auth/login` to receive a JWT, then send it as:
+
+```text
+Authorization: Bearer <access-token>
+```

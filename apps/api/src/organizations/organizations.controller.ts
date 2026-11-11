@@ -1,4 +1,4 @@
-﻿import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post } from "@nestjs/common";
 import { CreateOrganizationDto } from "./dto/create-organization.dto";
 import { OrganizationsService } from "./organizations.service";
 

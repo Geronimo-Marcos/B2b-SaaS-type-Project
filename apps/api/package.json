@@ -14,6 +14,7 @@
     "@nestjs/common": "^11.1.6",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.1.6",
+    "@nestjs/jwt": "^12.0.4",
     "@nestjs/platform-express": "^11.1.6",
     "@smartdocs/db": "workspace:*",
     "bcryptjs": "^3.0.3",

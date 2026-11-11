@@ -1,4 +1,4 @@
-﻿import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from "@nestjs/common";
+import { Body, Controller, Get, Param, ParseUUIDPipe, Post } from "@nestjs/common";
 import { CreateMembershipDto } from "./dto/create-membership.dto";
 import { MembershipsService } from "./memberships.service";
 

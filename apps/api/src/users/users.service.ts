@@ -42,4 +42,17 @@ export class UsersService {
       .from(users)
       .where(eq(users.isActive, true));
   }
+
+  findByEmail(email: string) {
+    return this.database.db.query.users.findFirst({
+      where: eq(users.email, email.trim().toLowerCase()),
+    });
+  }
+
+  markLastLogin(userId: string) {
+    return this.database.db
+      .update(users)
+      .set({ lastLoginAt: new Date(), updatedAt: new Date() })
+      .where(eq(users.id, userId));
+  }
 }
