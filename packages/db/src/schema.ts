@@ -9,6 +9,7 @@ import {
   uuid,
   varchar,
   vector,
+  unique,
 } from "drizzle-orm/pg-core";
 
 export const roleEnum = pgEnum("membership_role", ["admin", "editor", "viewer"]);
@@ -65,7 +66,7 @@ export const memberships = pgTable("memberships", {
   role: roleEnum("role").notNull(),
   invitedBy: uuid("invited_by").references(() => users.id),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
-});
+}, (table) => [unique("memberships_user_organization_unique").on(table.userId, table.organizationId)]);
 
 export const documents = pgTable("documents", {
   id: uuid("id").primaryKey().defaultRandom(),

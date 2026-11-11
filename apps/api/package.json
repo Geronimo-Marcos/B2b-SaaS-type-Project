@@ -16,6 +16,7 @@
     "@nestjs/core": "^11.1.6",
     "@nestjs/platform-express": "^11.1.6",
     "@smartdocs/db": "workspace:*",
+    "bcryptjs": "^3.0.3",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.2",
     "drizzle-orm": "0.45.4",
