@@ -1,4 +1,10 @@
-﻿import { ConflictException, Inject, Injectable, NotFoundException } from "@nestjs/common";
+import {
+  ConflictException,
+  ForbiddenException,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { memberships, organizations, users, type Database } from "@smartdocs/db";
 import { and, eq } from "drizzle-orm";
 import { DATABASE } from "../database/database.module";
@@ -14,7 +20,26 @@ function isUniqueViolation(error: unknown): boolean {
 export class MembershipsService {
   constructor(@Inject(DATABASE) private readonly database: Database) {}
 
-  async create(input: CreateMembershipDto) {
+  async assertMember(userId: string, organizationId: string, requiredRole?: "admin" | "editor" | "viewer") {
+    const [membership] = await this.database.db
+      .select({ role: memberships.role })
+      .from(memberships)
+      .where(and(eq(memberships.userId, userId), eq(memberships.organizationId, organizationId)));
+
+    if (!membership) {
+      throw new ForbiddenException("You do not belong to this organization");
+    }
+
+    if (requiredRole && membership.role !== requiredRole && membership.role !== "admin") {
+      throw new ForbiddenException(`The ${requiredRole} role is required`);
+    }
+
+    return membership;
+  }
+
+  async create(input: CreateMembershipDto, actorUserId: string) {
+    await this.assertMember(actorUserId, input.organizationId, "admin");
+
     const [user] = await this.database.db.select({ id: users.id }).from(users).where(eq(users.id, input.userId));
     const [organization] = await this.database.db
       .select({ id: organizations.id })
@@ -36,7 +61,9 @@ export class MembershipsService {
     }
   }
 
-  findByOrganization(organizationId: string) {
+  async findByOrganization(organizationId: string, actorUserId: string) {
+    await this.assertMember(actorUserId, organizationId);
+
     return this.database.db
       .select({
         id: memberships.id,

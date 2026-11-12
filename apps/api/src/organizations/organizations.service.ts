@@ -1,5 +1,5 @@
 ﻿import { ConflictException, Inject, Injectable } from "@nestjs/common";
-import { organizations, type Database } from "@smartdocs/db";
+import { memberships, organizations, type Database } from "@smartdocs/db";
 import { asc, eq } from "drizzle-orm";
 import { DATABASE } from "../database/database.module";
 import type { CreateOrganizationDto } from "./dto/create-organization.dto";
@@ -18,14 +18,22 @@ function isUniqueViolation(error: unknown): boolean {
 export class OrganizationsService {
   constructor(@Inject(DATABASE) private readonly database: Database) {}
 
-  async create(input: CreateOrganizationDto) {
+  async create(input: CreateOrganizationDto, userId: string) {
     try {
-      const [organization] = await this.database.db
-        .insert(organizations)
-        .values({ name: input.name.trim(), slug: input.slug.trim() })
-        .returning();
+      return await this.database.db.transaction(async (transaction) => {
+        const [organization] = await transaction
+          .insert(organizations)
+          .values({ name: input.name.trim(), slug: input.slug.trim() })
+          .returning();
 
-      return organization;
+        await transaction.insert(memberships).values({
+          userId,
+          organizationId: organization.id,
+          role: "admin",
+        });
+
+        return organization;
+      });
     } catch (error) {
       if (isUniqueViolation(error)) {
         throw new ConflictException("An organization with this slug already exists");
@@ -35,12 +43,19 @@ export class OrganizationsService {
     }
   }
 
-  async findAll() {
+  async findAll(userId: string) {
     return this.database.db
-      .select()
+      .select({
+        id: organizations.id,
+        name: organizations.name,
+        slug: organizations.slug,
+        status: organizations.status,
+        createdAt: organizations.createdAt,
+        updatedAt: organizations.updatedAt,
+      })
       .from(organizations)
-      .where(eq(organizations.status, "active"))
+      .innerJoin(memberships, eq(memberships.organizationId, organizations.id))
+      .where(eq(memberships.userId, userId))
       .orderBy(asc(organizations.createdAt));
   }
 }
-

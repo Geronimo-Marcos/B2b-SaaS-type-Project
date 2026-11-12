@@ -59,3 +59,8 @@ Login with `POST /api/auth/login` to receive a JWT, then send it as:
 ```text
 Authorization: Bearer <access-token>
 ```
+
+Organizations are tenant-scoped: users only see organizations where they have a
+membership. The user who creates an organization becomes its `admin`
+automatically. Only organization admins can add memberships; members can list
+the members of organizations they belong to.
