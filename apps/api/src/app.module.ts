@@ -8,6 +8,7 @@ import { UsersModule } from "./users/users.module";
 import { MembershipsModule } from "./memberships/memberships.module";
 import { AuthModule } from "./auth/auth.module";
 import { JwtAuthGuard } from "./auth/jwt-auth.guard";
+import { DocumentsModule } from "./documents/documents.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { JwtAuthGuard } from "./auth/jwt-auth.guard";
     OrganizationsModule,
     UsersModule,
     MembershipsModule,
+    DocumentsModule,
   ],
   providers: [{ provide: APP_GUARD, useClass: JwtAuthGuard }],
 })
