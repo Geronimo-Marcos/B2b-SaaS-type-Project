@@ -65,7 +65,8 @@ membership. The user who creates an organization becomes its `admin`
 automatically. Only organization admins can add memberships; members can list
 the members of organizations they belong to.
 
-Documents are currently created as metadata records through
-`POST /api/documents`. The request includes the organization, original file
-name, storage key, MIME type, and size. Uploading to object storage and
-asynchronous processing will be added next.
+`POST /api/documents` creates a document record and returns a presigned `PUT`
+URL. The client uploads the file directly to S3-compatible storage using that
+URL. Configure `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, and
+`S3_SECRET_ACCESS_KEY`; optionally set `S3_ENDPOINT` for MinIO or another
+S3-compatible provider.

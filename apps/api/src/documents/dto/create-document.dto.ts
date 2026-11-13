@@ -23,11 +23,6 @@ export class CreateDocumentDto {
   @MaxLength(255)
   originalName!: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @MaxLength(1024)
-  storageKey!: string;
-
   @IsOptional()
   @IsString()
   @MaxLength(120)
