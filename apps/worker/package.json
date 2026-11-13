@@ -3,11 +3,25 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "echo \"TODO: bootstrap worker\"",
-    "build": "echo \"TODO: build worker\"",
+    "dev": "tsx watch src/main.ts",
+    "build": "tsc --project tsconfig.json",
     "lint": "echo \"TODO: lint worker\"",
-    "typecheck": "echo \"TODO: typecheck worker\"",
+    "typecheck": "tsc --noEmit --project tsconfig.json",
     "test": "echo \"TODO: test worker\""
+  },
+  "dependencies": {
+    "@smartdocs/db": "workspace:*",
+    "bullmq": "^5.63.0",
+    "drizzle-orm": "0.45.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.11",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.6",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2"
   }
 }
-
