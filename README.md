@@ -70,3 +70,7 @@ URL. The client uploads the file directly to S3-compatible storage using that
 URL. Configure `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, and
 `S3_SECRET_ACCESS_KEY`; optionally set `S3_ENDPOINT` for MinIO or another
 S3-compatible provider.
+
+After the upload finishes, call `POST /api/documents/confirm-upload`. This
+queues PDF extraction in BullMQ. The worker stores extracted text as chunks,
+uploads a plain-text copy, and updates the document and job status.
