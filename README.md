@@ -73,4 +73,7 @@ S3-compatible provider.
 
 After the upload finishes, call `POST /api/documents/confirm-upload`. This
 queues PDF extraction in BullMQ. The worker stores extracted text as chunks,
-uploads a plain-text copy, and updates the document and job status.
+generates 1536-dimensional embeddings with OpenAI, uploads a plain-text copy,
+and updates the document and job status. Configure `OPENAI_API_KEY` and
+optionally `OPENAI_EMBEDDING_MODEL` (default:
+`text-embedding-3-small`).

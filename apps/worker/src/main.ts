@@ -2,12 +2,14 @@ import { Worker } from "bullmq";
 import {
   createDatabase,
   documentChunks,
+  documentEmbeddings,
   documentJobs,
   documents,
 } from "@smartdocs/db";
 import { GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { eq } from "drizzle-orm";
 import { PDFParse } from "pdf-parse";
+import OpenAI from "openai";
 
 const databaseUrl = process.env.DATABASE_URL?.trim();
 const redisUrl = process.env.REDIS_URL?.trim() || "redis://localhost:6379";
@@ -17,6 +19,54 @@ if (!databaseUrl) {
 }
 
 const database = createDatabase(databaseUrl);
+
+function createEmbeddingClient(): { client: OpenAI; model: string } {
+  const apiKey = process.env.OPENAI_API_KEY?.trim();
+  if (!apiKey) {
+    throw new Error("OPENAI_API_KEY is required");
+  }
+
+  return {
+    client: new OpenAI({ apiKey }),
+    model: process.env.OPENAI_EMBEDDING_MODEL?.trim() || "text-embedding-3-small",
+  };
+}
+
+async function generateEmbeddings(
+  chunks: Array<{ id: string; content: string }>,
+  client: OpenAI,
+  model: string,
+) {
+  const embeddings: Array<{ chunkId: string; embedding: number[]; modelName: string }> = [];
+
+  for (let offset = 0; offset < chunks.length; offset += 100) {
+    const batch = chunks.slice(offset, offset + 100);
+    const response = await client.embeddings.create({
+      model,
+      input: batch.map((chunk) => chunk.content),
+    });
+
+    if (response.data.length !== batch.length) {
+      throw new Error(
+        `Embedding API returned ${response.data.length} vectors for ${batch.length} chunks`,
+      );
+    }
+
+    for (let index = 0; index < response.data.length; index += 1) {
+      const embedding = response.data[index].embedding;
+      if (embedding.length !== 1536) {
+        throw new Error(`Embedding returned ${embedding.length} dimensions instead of 1536`);
+      }
+      embeddings.push({
+        chunkId: batch[index].id,
+        embedding,
+        modelName: model,
+      });
+    }
+  }
+
+  return embeddings;
+}
 
 function createStorageClient(): { client: S3Client; bucket: string } {
   const region = process.env.S3_REGION?.trim();
@@ -92,10 +142,20 @@ async function processDocument(documentId: string, jobId: string, updateProgress
       });
     }
 
-    await database.db.transaction(async (transaction) => {
+    const insertedChunks = await database.db.transaction(async (transaction) => {
       await transaction.delete(documentChunks).where(eq(documentChunks.documentId, documentId));
-      await transaction.insert(documentChunks).values(chunks);
+      return transaction
+        .insert(documentChunks)
+        .values(chunks)
+        .returning({ id: documentChunks.id, content: documentChunks.content });
     });
+
+    await updateProgress(70);
+    const embedding = createEmbeddingClient();
+    const embeddings = await generateEmbeddings(insertedChunks, embedding.client, embedding.model);
+    await updateProgress(80);
+
+    await database.db.insert(documentEmbeddings).values(embeddings);
 
     const extractedKey = `${document.storageKey}/extracted.txt`;
     await storage.client.send(
