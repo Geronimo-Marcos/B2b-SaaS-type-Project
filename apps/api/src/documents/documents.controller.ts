@@ -5,12 +5,15 @@ import {
   Param,
   ParseUUIDPipe,
   Post,
+  Sse,
 } from "@nestjs/common";
+import { interval, from, distinctUntilChanged, map, startWith, switchMap, takeWhile } from "rxjs";
 import { CurrentUser } from "../auth/current-user.decorator";
 import type { AuthenticatedUser } from "../auth/jwt-auth.guard";
 import { CreateDocumentDto } from "./dto/create-document.dto";
 import { ConfirmDocumentUploadDto } from "./dto/confirm-document-upload.dto";
 import { DocumentsService } from "./documents.service";
+import { ChatDocumentDto } from "./dto/chat-document.dto";
 
 @Controller("documents")
 export class DocumentsController {
@@ -43,5 +46,36 @@ export class DocumentsController {
     @CurrentUser() user: AuthenticatedUser,
   ) {
     return this.documentsService.findOne(documentId, user.sub);
+  }
+
+  @Post(":documentId/chat")
+  chat(
+    @Param("documentId", ParseUUIDPipe) documentId: string,
+    @Body() input: ChatDocumentDto,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return this.documentsService.chat(documentId, input, user.sub);
+  }
+
+  @Sse(":documentId/progress")
+  progress(
+    @Param("documentId", ParseUUIDPipe) documentId: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    return interval(1000).pipe(
+      startWith(0),
+      switchMap(() => from(this.documentsService.getProcessingStatus(documentId, user.sub))),
+      map((status) => ({ data: status })),
+      distinctUntilChanged(
+        (previous, current) =>
+          JSON.stringify(previous.data) === JSON.stringify(current.data),
+      ),
+      takeWhile(
+        (event) =>
+          event.data.documentStatus !== "processed" &&
+          event.data.documentStatus !== "failed",
+        true,
+      ),
+    );
   }
 }

@@ -56,6 +56,9 @@ importers:
       drizzle-orm:
         specifier: 0.45.4
         version: 0.45.4(@types/pg@8.23.1)(pg@8.23.1)(postgres@3.4.9)
+      openai:
+        specifier: ^7.63.0
+        version: 7.63.0(@aws-sdk/credential-provider-node@3.972.97)(@smithy/signature-v4@5.7.5)(zod@4.6.7)
       reflect-metadata:
         specifier: ^0.2.2
         version: 0.2.2

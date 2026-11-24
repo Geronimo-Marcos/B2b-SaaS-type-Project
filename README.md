@@ -77,3 +77,13 @@ generates 1536-dimensional embeddings with OpenAI, uploads a plain-text copy,
 and updates the document and job status. Configure `OPENAI_API_KEY` and
 optionally `OPENAI_EMBEDDING_MODEL` (default:
 `text-embedding-3-small`).
+
+Chat is available through `POST /api/documents/:documentId/chat` for processed
+documents. The API embeds the question, retrieves the closest chunks with
+pgvector cosine distance, and sends only that context to the configured chat
+model. Set `OPENAI_CHAT_MODEL` to override the default `gpt-4o-mini`.
+
+Processing progress is available through
+`GET /api/documents/:documentId/progress` using Server-Sent Events. The stream
+polls the job status every second and closes when the document reaches
+`processed` or `failed`.
